@@ -133,7 +133,17 @@ class PhpcsDiff
             );
         }
 
-        $phpcsOutput = $this->runPhpcs($fileDiff);
+        $ruleset = 'ruleset.xml';
+
+        foreach ($this->argv as $arg) {
+            if (\str_starts_with($arg, '--standard=')) {
+                $ruleset = \str_replace('--standard=', '', $arg);
+
+                break;
+            }
+        }
+
+        $phpcsOutput = $this->runPhpcs($fileDiff, $ruleset);
 
         if (is_null($phpcsOutput)) {
             $this->error('Unable to run phpcs executable.');
